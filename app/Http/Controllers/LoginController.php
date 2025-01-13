@@ -21,7 +21,7 @@ class LoginController extends Controller
     public function google_callback()
     {
         $user = Socialite::driver('google')->stateless()->user();
-        // dd($user);
+        dd($user);
         $checkUser = User::where('email', $user->email)->first();
         if(!$checkUser){
             $valueUser = [

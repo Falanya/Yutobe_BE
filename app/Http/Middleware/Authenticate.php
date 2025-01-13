@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\ResponseEnum;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,17 @@ class Authenticate extends Middleware
      */
     protected function redirectTo(Request $request): ?string
     {
-        return $request->expectsJson() ? null : route('login');
+        // return $request->expectsJson() ? null : route('login');
+        return ($request->is('api/*') || $request->expectsJson()) ? null : route('login');
+    }
+
+    protected function unauthenticated($request, array $guards)
+    {
+        if($request->is('api/*') || $request->expectsJson()){
+            abort(response()->json([
+                'success' => false,
+                'message' => 'Not authenticated'
+            ],ResponseEnum::UNAUTHORIZED));
+        }
     }
 }

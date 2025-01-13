@@ -15,20 +15,13 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
-
-    'allowed_methods' => ['*'],
-
-    'allowed_origins' => ['*'],
-
-    'allowed_origins_patterns' => [],
-
-    'allowed_headers' => ['*'],
-
+    'paths' => ['api/*'], // Các route áp dụng
+    'allowed_methods' => ['*'], // Tất cả phương thức
+    'allowed_origins' => ['https://yutube.huylab.click'], // Chỉ định domain cụ thể
+    'allowed_origins_patterns' => [], // Không sử dụng regex
+    'allowed_headers' => ['Content-Type', 'Authorization'], // Header được phép
     'exposed_headers' => [],
-
-    'max_age' => 0,
-
-    'supports_credentials' => false,
+    'max_age' => 3600, // Cache preflight
+    'supports_credentials' => true, // Hỗ trợ cookies và thông tin xác thực
 
 ];

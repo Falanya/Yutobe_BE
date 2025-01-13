@@ -17,7 +17,8 @@ use App\Http\Controllers\VideoController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $image = Storage::url('public/user/images/677ec83e59384.jpg');
+    return view('welcome',compact('image'));
 });
 
 // Route::get('convert-video', [VideoController::class, 'convertVideo']);

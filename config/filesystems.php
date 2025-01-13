@@ -56,6 +56,14 @@ return [
             'throw' => false,
         ],
 
+        'nas' => [
+            'driver' => 'ftp', // hoặc 'sftp'
+            'host' => '192.168.0.199', // IP của NAS
+            'username' => 'testVideo',
+            'password' => 'q#&$8.\F',
+            'root' => '/video/', // Đường dẫn thư mục trên NAS
+        ],
+
     ],
 
     /*
