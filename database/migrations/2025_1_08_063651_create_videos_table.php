@@ -19,7 +19,9 @@ return new class extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->string('slug');
             $table->integer('view')->default(0);
+            $table->integer('likes')->default(0);
             $table->enum('status',['private','public']);
+            $table->boolean('verified')->default(0);
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });

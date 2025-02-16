@@ -35,16 +35,20 @@ class UploadVideoController extends Controller
 
         $this->saveTemporarily($request,$videoName);
         $this->saveThumbnail($request,$thumbnailName);
-
         $videoPath = public_path("/$this->directory_raw/$videoName");
-        $this->convertVideo($videoPath,$namePrefix);
-
-        $this->saveDB($request,$auth,$thumbnailName,$namePrefix);
-
-        return response()->json([
-            'value' => $request->file('video'),
-            'pathvideo' => $videoPath
-        ],ResponseEnum::OK);
+        if($videoPath){
+            $this->convertVideo($videoPath,$namePrefix);
+            $this->saveDB($request,$auth,$thumbnailName,$namePrefix);
+            return response()->json([
+                'success' => true,
+                'message' => 'Đăng video thành công',
+            ],ResponseEnum::OK);
+        }else{
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi lưu video, vui lòng đăng lại',
+            ],ResponseEnum::BADREQUEST);
+        }
 
     }
 
@@ -61,7 +65,7 @@ class UploadVideoController extends Controller
     private function saveDB($request,$auth,$thumbnailName,$videoName){
         Video::create([
             'title' => $request->title,
-            'thumbnail' => "https://huylab.click/thumbnails/$thumbnailName",
+            'thumbnail' => $thumbnailName,
             'description' => $request->description,
             'user_id' => $auth,
             'slug' => $videoName,

@@ -14,6 +14,17 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'name' => $this->name,
+            'email' => $this->email,
+            'avatar' => $this->getAvatar($this->avatar),
+        ];
+    }
+
+    private function getAvatar($avatar){
+        if(filter_var($avatar, FILTER_VALIDATE_URL)){
+            return $avatar;
+        }
+        return basename($avatar);
     }
 }

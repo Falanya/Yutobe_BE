@@ -56,13 +56,25 @@ return [
             'throw' => false,
         ],
 
-        'nas' => [
-            'driver' => 'ftp', // hoặc 'sftp'
-            'host' => '192.168.0.199', // IP của NAS
-            'username' => 'testVideo',
-            'password' => 'q#&$8.\F',
-            'root' => '/video/', // Đường dẫn thư mục trên NAS
+
+        'nas1' => [
+            'driver' => 'local',
+            'root' => '/mnt/nas_video_web', // Đường dẫn tới thư mục mount
         ],
+        'ftp' => [
+            'driver' => 'ftp',
+            'host' => env('FTP_HOST'),
+            'username' => env('FTP_USERNAME'),
+            'password' => env('FTP_PASSWORD'),
+              'root' => env('FTP_ROOT'),
+            // Optional FTP Settings...
+            // 'port' => env('FTP_PORT', 21),
+            // 'root' => env('FTP_ROOT'),
+            // 'passive' => true,
+            // 'ssl' => true,
+            // 'timeout' => 30,
+        ],
+
 
     ],
 

@@ -11,7 +11,7 @@ class Video extends Model
 
     protected $table = 'videos';
     protected $fillable = [
-        'title', 'thumbnail','description','user_id','slug','status','created_at','updated_at'
+        'title', 'thumbnail','description','user_id','slug','view','status','verified','created_at','updated_at'
     ];
 
     public function getUser(){
