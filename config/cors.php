@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'paths' => ['api/*'], // Các route áp dụng
+    'paths' => ['api/*','receive-event'], // Các route áp dụng
     'allowed_methods' => ['*'], // Tất cả phương thức
     'allowed_origins' => ['https://yutube.huylab.click'], // Chỉ định domain cụ thể
     'allowed_origins_patterns' => [], // Không sử dụng regex

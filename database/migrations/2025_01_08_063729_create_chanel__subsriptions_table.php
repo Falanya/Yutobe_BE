@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('chanel__subsriptions', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('user_id_sub')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id_sub')->references('id')->on('users');
             $table->timestamps();
         });
     }

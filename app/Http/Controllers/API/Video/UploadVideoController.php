@@ -84,7 +84,7 @@ class UploadVideoController extends Controller
         $outputPlaylist = $outputDir . "/$videoName.m3u8";
         $outputSegment = $outputDir . '/segment_%03d.ts';
 
-        $command = "ffmpeg -i $videoPath -profile:v baseline -level 3.0 -start_number 0 -hls_time 10 -hls_list_size 0 -hls_segment_filename $outputSegment -f hls $outputPlaylist";
+        $command = "ffmpeg -i \"$videoPath\" -vf \"scale=1280:720:force_original_aspect_ratio=1,pad=1280:720:(ow-iw)/2:(oh-ih)/2\",setsar=1:1 -profile:v baseline -level 3.0 -start_number 0 -hls_time 10 -hls_list_size 0 -hls_segment_filename \"$outputSegment\" -f hls \"$outputPlaylist\"";
 
         exec($command . " 2>&1", $output, $returnVar);
     }

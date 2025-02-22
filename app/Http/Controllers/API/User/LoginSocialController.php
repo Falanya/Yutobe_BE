@@ -33,7 +33,7 @@ class LoginSocialController extends Controller
                     'social_name' => 'google',
                     'social_id' => $social_idInput,
                 ]);
-                $token = $createUser->createToken('login', ['*'], now()->addWeek())->plainTextToken;
+                $token = $createUser->createToken('web', ['*'])->plainTextToken;
                 return response()->json([
                     'token' => $token,
                     'message' => 'Đăng ký người dùng thành công',
@@ -45,18 +45,13 @@ class LoginSocialController extends Controller
                 ]);
             }
         }else{
-            $token = $checkUser->createToken('login', ['*'], now()->addWeek())->plainTextToken;
+            $token = $checkUser->createToken('web', ['*'])->plainTextToken;
             return response()->json([
                 'token' => $token,
                 'message' => 'Đăng nhập người dùng thành công',
                 'status' => 200,
             ]);
         }
-        // return response()->json([
-        //     'message' => 123,
-        //     'error' => 'Con cặc',
-        //     'email'=> $emailInput,
-        // ]);
     }
 
 }

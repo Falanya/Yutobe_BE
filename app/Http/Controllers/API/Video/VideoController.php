@@ -43,6 +43,22 @@ class VideoController extends Controller
         }
     }
 
+    public function videoSuggestInDetail($slug){
+        $video = Video::where('slug',$slug)->first();
+        $videos = VideoResource::collection(Video::whereNotIn('id',[$video->id])->inRandomOrder()->limit(10)->get());
+        if($videos){
+            return response()->json([
+                'videos' => $videos,
+                'success' => true
+            ],ResponseEnum::ACCEPTED);
+        }else{
+            return response()->json([
+                'message' => 'Not found',
+                'success' => false
+            ],ResponseEnum::NO_CONTENT);
+        }
+    }
+
     public function addView($slug){
         $video = Video::where('slug',$slug)->firstOrFail();
         if($video){
@@ -100,6 +116,38 @@ class VideoController extends Controller
                     'success' => false,
                     'like_status' => false,
                 ],ResponseEnum::NO_CONTENT);
+            }
+        }else{
+            return response()->json([
+                'success' => false,
+                'message' => 'Video not found',
+            ],ResponseEnum::NO_CONTENT);
+        }
+    }
+
+    public function dislikeVideo($slug){
+        $auth = auth()->user()->id;
+        $video = Video::where('slug',$slug)->first();
+        if($video){
+            $check = Like_video::where('video_id',$video->id)->where('user_id',$auth)->first();
+            if($check){
+                $delete = $check->delete();
+                if($delete){
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Like canceled',
+                    ],ResponseEnum::ACCEPTED);
+                }else{
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Some errors, please try again'
+                    ],ResponseEnum::BADREQUEST);
+                }
+            }else{
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please try again'
+                ],ResponseEnum::NOTFOUND);
             }
         }else{
             return response()->json([

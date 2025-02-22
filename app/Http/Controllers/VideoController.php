@@ -42,9 +42,9 @@ class VideoController extends Controller
 
         $outputPlaylist = $outputDir . "/$videoNamePrefix.m3u8";
         $outputSegment = $outputDir . '/segment_%03d.ts';
-
+        $scaleCommand = "-vf scale=1280:720";
         // Lệnh FFmpeg để tạo HLS và chia thành nhiều file .ts
-        $command = "ffmpeg -i $videoPath -profile:v baseline -level 3.0 -start_number 0 -hls_time 10 -hls_list_size 0 -hls_segment_filename $outputSegment -f hls $outputPlaylist";
+        $command = "ffmpeg -i $videoPath $scaleCommand -profile:v baseline -level 3.0 -start_number 0 -hls_time 10 -hls_list_size 0 -hls_segment_filename $outputSegment -f hls $outputPlaylist";
 
         // Thực thi lệnh FFmpeg
         exec($command . " 2>&1", $output, $returnVar);

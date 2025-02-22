@@ -16,7 +16,7 @@ return new class extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->string('social_name');
             $table->string('social_id');
-            $table->string('social_token');
+            $table->string('social_token')->nullable();
             $table->string('social_refresh_token')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

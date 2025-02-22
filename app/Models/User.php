@@ -44,4 +44,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function getSub(){
+        return $this->hasMany(Chanel_Subsription::class,'user_id');
+    }
+
+    public function getVideo(){
+        return $this->hasMany(Video::class,'user_id')->orderBy('id','DESC');
+    }
 }
