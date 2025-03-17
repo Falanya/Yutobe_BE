@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserRequest extends FormRequest
 {
@@ -23,8 +24,20 @@ class UserRequest extends FormRequest
     {
         return [
             "name" => "required|string|max:50",
-            "phone" => "numeric|min:9|max:13",
+            "description" => "numeric|max:255",
 
         ];
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        $errors = $validator->errors();
+
+        $response = response()->json([
+            'message' => 'Invalid data send',
+            'errors' => $errors->messages(),
+        ], 422);
+
+        throw new HttpResponseException($response);
     }
 }

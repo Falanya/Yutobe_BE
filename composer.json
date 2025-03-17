@@ -13,7 +13,9 @@
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.8",
         "league/flysystem-ftp": "^3.0",
+        "payos/payos": "^1.0",
         "pbmedia/laravel-ffmpeg": "^8.6",
+        "predis/predis": "^2.0",
         "sabre/dav": "^4.7"
     },
     "require-dev": {

@@ -3,25 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh sách video</title>
+    <title>HLS Video Player</title>
+    <!-- Thêm HLS.js -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
-    <h1>Danh sách video trong thư mục ZABBIX</h1>
 
-    <ul>
+    <h1>Video HLS Player</h1>
+    <video id="video" controls>
+        Your browser does not support HLS.
+    </video>
 
-        @foreach($mp4Files as $file)
-            <li>
-                <!-- Hiển thị tên file -->
-                {{ basename($file) }}
+    <script>
+        // Gọi API của Laravel để lấy video_url
+        fetch('/api/ftp/list-files')  // Đảm bảo đây là đúng route API của bạn
+            .then(response => response.json())
+            .then(data => {
+                const videoUrl = data.video_url;
 
-                <!-- Trình phát video cho mỗi file -->
-                <video width="320" height="240" controls>
-                    <source src="{{ Storage::disk('ftp')->url($file) }}" type="video/mp4">
-                    Trình duyệt của bạn không hỗ trợ video.
-                </video>
-            </li>
-        @endforeach
-    </ul>
+                if (videoUrl) {
+                    // Kiểm tra trình duyệt có hỗ trợ HLS.js hay không
+                    const video = document.getElementById('video');
+                    if (Hls.isSupported()) {
+                        const hls = new Hls();
+                        hls.loadSource(videoUrl);
+                        hls.attachMedia(video);
+                    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                        // Safari hoặc trình duyệt hỗ trợ HLS natively
+                        video.src = videoUrl;
+                    }
+                } else {
+                    console.error('Không tìm thấy video HLS!');
+                }
+            })
+            .catch(error => console.error('Error fetching video URL:', error));
+    </script>
+
 </body>
 </html>

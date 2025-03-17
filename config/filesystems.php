@@ -59,7 +59,8 @@ return [
 
         'nas1' => [
             'driver' => 'local',
-            'root' => '/mnt/nas_video_web', // Đường dẫn tới thư mục mount
+            'host' => 'nfs-server',
+            'root' => '/mnt/nfs_client', // Đường dẫn tới thư mục mount
         ],
         'ftp' => [
             'driver' => 'ftp',

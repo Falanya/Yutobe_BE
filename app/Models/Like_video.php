@@ -13,4 +13,8 @@ class Like_video extends Model
         'user_id',
         'video_id'
     ];
+
+    public function getVideo(){
+        return $this->belongsTo(Video::class,'id','video_id');
+    }
 }

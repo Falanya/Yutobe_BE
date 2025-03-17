@@ -1,12 +1,16 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Payment\OrderController;
+use App\Http\Controllers\Payment\PaymentController;
 use App\Http\Controllers\PlaylistController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\VideoTestController;
 use Illuminate\Support\Facades\Storage;
-
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Payment\CheckoutController;
+use App\Http\Controllers\VideoNasController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,7 +24,8 @@ use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
     $image = Storage::url('public/user/images/677ec83e59384.jpg');
-    return view('welcome',compact('image'));
+    $video = Storage::disk('ftp')->path('Movie/673ad19c91c1a_Gotterdammerung.mp4');
+    return view('welcome',compact('image','video'));
 });
 
 // Route::get('convert-video', [VideoController::class, 'convertVideo']);
@@ -37,18 +42,36 @@ Route::get('/login', [LoginController::class, 'login_view']);
 Route::get('/videos', [VideoTestController::class, 'index'])->name('video.index');
 
 // Route để phát video HLS
-Route::get('/video/{filename}', [VideoTestController::class, 'stream'])->name('video.stream');
+// Route::get('/video/{filename}', [VideoTestController::class, 'stream'])->name('video.stream');
+
+// Route::get('/ftp/video/{filename}', [VideoNasController::class, 'streamVideo']);
+Route::get('/load-video/{filename}', [VideoNasController::class, 'streamVideo']);
+
+Route::post('/create-payment-link', [CheckoutController::class, 'createPaymentLink']);
+
+Route::prefix('/order')->group(function () {
+    Route::post('/create', [OrderController::class, 'createOrder']);
+    Route::get('/{id}', [OrderController::class, 'getPaymentLinkInfoOfOrder']);
+    Route::put('/{id}', [OrderController::class, 'cancelPaymentLinkOfOrder']);
+});
+
+Route::prefix('/payment')->group(function () {
+    Route::post('/payos', [PaymentController::class, 'handlePayOSWebhook']);
+});
+
+Route::get('/success.html', function () {
+    return view('success');
+});
+
+Route::get('/cancel.html', function () {
+    return view('cancel');
+});
 
 
 
 
 
 
-
-
-
-Route::get('/list-files', [VideoTestController::class, 'listFiles']);
-Route::get('/video/{filename}', [VideoTestController::class, 'getVideo']);
 
 Route::get('/stream-m3u8/{folder}', function ($folder) {
     // Đường dẫn thư mục cần kiểm tra
@@ -102,5 +125,13 @@ Route::get('/player/{folder}', function ($folder) {
     return view('player', ['folder' => $folder]);
 });
 
+Route::get('/read-file/{filename}', [VideoNasController::class, 'readFile']);
+Route::get('/list-directories', [VideoNasController::class, 'listDirectories']);
+//test
+// Route::get('/video/{filename}', [VideoController::class, 'streamVideo']);
 
+
+Route::get('/viewmovie', function () {
+    return view('viewmovie');  // Trả về view 'viewmovie.blade.php'
+});
 

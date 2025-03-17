@@ -76,6 +76,7 @@ class UploadVideoController extends Controller
     }
 
     private function convertVideo($videoPath,$videoName){
+        // $outputDir = public_path("/videos_hls/$videoName");
         $outputDir = public_path("/videos_hls/$videoName");
         if(!file_exists($outputDir)){
             mkdir($outputDir,0777,true);

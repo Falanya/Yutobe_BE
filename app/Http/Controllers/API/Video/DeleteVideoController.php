@@ -17,7 +17,12 @@ class DeleteVideoController extends Controller
             if(File::exists(public_path("videos_hls/$slug"))){
                 File::delete(public_path("videos_hls/$slug"));
                 File::delete(public_path("thumbnails/$check->thumbnail"));
+                $check->getLike()->delete();
+                $check->getPlaylistVideo()->delete();
                 $check->delete();
+                // foreach($likes as $key => $like){
+
+                // }
                 return response()->json([
                     'success' => true,
                     'message' => 'Successfully deleted the video'

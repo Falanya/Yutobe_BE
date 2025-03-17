@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Laravel</title>
-
+    <link rel="stylesheet" href="style.css" />
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
@@ -1009,17 +1009,72 @@
             </div>
         </div>
     </div> --}}
+
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
     <video
         id="my-video"
-        class="video-js vjs-default-skin"
         controls
         preload="auto"
         width="600"
-        height="400"
-        data-setup='{}'>
-        <source src="{{ asset('videos_hls/1736234399/1736234399.m3u8') }}" type="application/x-mpegURL">
+        height="400">
     </video>
-    <img src="{{ $image }}" alt="">
+
+    <div class="main-box">
+        <div class="checkout">
+            <div class="product">
+                <p><strong>Tên sản phẩm:</strong> Mì tôm Hảo Hảo ly</p>
+                <p><strong>Giá tiền:</strong> 2000 VNĐ</p>
+                <p><strong>Số lượng:</strong> 1</p>
+            </div>
+            <form action="/create-payment-link" method="post">
+                <button type="submit" id="create-payment-link-btn">
+                    Tạo Link thanh toán
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+      // Kiểm tra nếu trình duyệt hỗ trợ HLS.js
+      var video = document.getElementById('my-video');
+      if (Hls.isSupported()) {
+        var hls = new Hls();
+
+        // Kiểm tra xem tệp m3u8 có tồn tại và hợp lệ không
+        var m3u8Url = '{{ url("/load-video/playlist.m3u8") }}';
+
+        hls.loadSource(m3u8Url);
+        hls.attachMedia(video);
+
+        // Xử lý sự kiện khi video đã sẵn sàng
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+          console.log("Manifest parsed successfully");
+        });
+
+        // Lắng nghe lỗi
+        hls.on(Hls.Events.ERROR, function(event, data) {
+          if (data.fatal) {
+            console.error("HLS.js error: ", data);
+          }
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        // Nếu không hỗ trợ HLS.js, sử dụng tính năng native của trình duyệt (Safari)
+        var m3u8Url = '{{ url("/load-video/playlist.m3u8") }}';
+        video.src = m3u8Url;
+        video.addEventListener('canplay', function () {
+          video.play();
+        });
+      } else {
+        console.error("This browser does not support HLS playback.");
+      }
+    </script>
+
+
+
 </body>
+
+
 
 </html>

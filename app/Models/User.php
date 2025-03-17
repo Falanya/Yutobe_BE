@@ -50,6 +50,6 @@ class User extends Authenticatable
     }
 
     public function getVideo(){
-        return $this->hasMany(Video::class,'user_id')->orderBy('id','DESC');
+        return $this->hasMany(Video::class,'user_id')->where('verified',1)->orderBy('id','DESC');
     }
 }

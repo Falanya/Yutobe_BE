@@ -49,7 +49,8 @@ class AuthController extends Controller
             'password' => $request->password,
         ];
         if(Auth::guard('admin')->attempt($value)){
-            $user = Admin::where('email',$request->email)->first();
+            // $user = Admin::where('email',$request->email)->first();
+            $user = Auth::guard('admin')->user();
             $token = $user->createToken(
                 'admin', ['*'],
             )->plainTextToken;
